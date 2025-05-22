@@ -1,0 +1,183 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Dashboard - Stock Manager{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Tableau de bord</h1>
+        <a href="{% url 'ajouter_produit' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nouveau Produit
+        </a>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white stats-card">
+                <div class="card-body">
+                    <i class="fas fa-box fa-2x mb-3"></i>
+                    <h5 class="card-title">Total Produits</h5>
+                    <h2 class="card-text">{{ stats.total_produits }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white stats-card">
+                <div class="card-body">
+                    <i class="fas fa-truck fa-2x mb-3"></i>
+                    <h5 class="card-title">Total Fournisseurs</h5>
+                    <h2 class="card-text">{{ stats.total_fournisseurs }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-info text-white stats-card">
+                <div class="card-body">
+                    <i class="fas fa-tags fa-2x mb-3"></i>
+                    <h5 class="card-title">Total Catégories</h5>
+                    <h2 class="card-text">{{ stats.total_categories }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produits à faible stock -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Produits à faible stock
+                    </h5>
+                    <span class="badge bg-dark">{{ produits_faible_stock.count }} produits</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Quantité</th>
+                                    <th>Catégorie</th>
+                                    <th>Prix de vente</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produit in produits_faible_stock %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-box text-warning me-2"></i>
+                                            {{ produit.nom }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if produit.quantite <= 5 %}
+                                            <span class="badge-quantity badge-quantity-low">{{ produit.quantite }}</span>
+                                        {% elif produit.quantite <= 10 %}
+                                            <span class="badge-quantity badge-quantity-medium">{{ produit.quantite }}</span>
+                                        {% else %}
+                                            <span class="badge-quantity badge-quantity-high">{{ produit.quantite }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge-category">{{ produit.categorie.nom }}</span>
+                                    </td>
+                                    <td>{{ produit.prix_vente }} €</td>
+                                    <td>
+                                        <a href="{% url 'modifier_produit' produit.pk %}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-edit me-1"></i>Gérer
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">
+                                        <i class="fas fa-check-circle text-success fa-2x mb-3"></i>
+                                        <p class="mb-0">Aucun produit à faible stock</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Derniers mouvements -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-history me-2"></i>Derniers mouvements de stock
+                    </h5>
+                    <span class="badge bg-light text-dark">5 derniers</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Produit</th>
+                                    <th>Type</th>
+                                    <th>Quantité</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mouvement in derniers_mouvements %}
+                                <tr>
+                                    <td>
+                                        <i class="fas fa-calendar-alt me-2 text-muted"></i>
+                                        {{ mouvement.date|date:"d/m/Y H:i" }}
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-box text-secondary me-2"></i>
+                                            {{ mouvement.produit.nom }}
+                                            <span class="badge-category ms-2">{{ mouvement.produit.categorie.nom }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if mouvement.type == 'entrée' %}
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-arrow-down me-1"></i>Entrée
+                                        </span>
+                                        {% else %}
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-arrow-up me-1"></i>Sortie
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if mouvement.quantite <= 5 %}
+                                            <span class="badge-quantity badge-quantity-low">{{ mouvement.quantite }}</span>
+                                        {% elif mouvement.quantite <= 10 %}
+                                            <span class="badge-quantity badge-quantity-medium">{{ mouvement.quantite }}</span>
+                                        {% else %}
+                                            <span class="badge-quantity badge-quantity-high">{{ mouvement.quantite }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">
+                                        <i class="fas fa-clock text-muted fa-2x mb-3"></i>
+                                        <p class="mb-0">Aucun mouvement récent</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

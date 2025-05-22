@@ -1,0 +1,106 @@
+{% extends 'inventory/base.html' %}
+{% block title %}Liste des produits - Gestion Inventaire{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0"><i class="fas fa-boxes mr-2"></i>Gestion des produits</h2>
+                <a href="{% url 'ajouter_produit' %}" class="btn btn-success">
+                    <i class="fas fa-plus-circle mr-2"></i>Ajouter un produit
+                </a>
+            </div>
+            <hr class="mt-2">
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-list mr-2"></i>Liste des produits</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="align-middle">Nom</th>
+                            <th class="align-middle text-center">Quantité</th>
+                            <th class="align-middle text-right">Prix Achat</th>
+                            <th class="align-middle text-right">Prix Vente</th>
+                            <th class="align-middle">Catégorie</th>
+                            <th class="align-middle">Fournisseur</th>
+                            <th class="align-middle text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for produit in produits %}
+                        <tr>
+                            <td class="align-middle font-weight-bold">{{ produit.nom }}</td>
+                            <td class="align-middle text-center">
+                                <span class="badge {% if produit.quantite <= 5 %}badge-quantity badge-quantity-low{% elif produit.quantite <= 15 %}badge-quantity badge-quantity-medium{% else %}badge-quantity badge-quantity-high{% endif %}">
+                                    {{ produit.quantite }}
+                                </span>
+                            </td>
+                            <td class="align-middle text-right">{{ produit.prix_achat|floatformat:2 }} €</td>
+                            <td class="align-middle text-right">{{ produit.prix_vente|floatformat:2 }} €</td>
+                            <td class="align-middle text-right">{{ produit.categorie }}</td>
+                            
+                            <td class="align-middle">{{ produit.fournisseur }}</td>
+                            <td class="align-middle text-center">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{% url 'modifier_produit' produit.pk %}" class="btn btn-outline-primary" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'supprimer_produit' produit.pk %}" class="btn btn-outline-danger" title="Supprimer">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
+                                <p>Aucun produit enregistré</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">Total: {{ produits.count }} produit(s)</small>
+                {% if produits.has_other_pages %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-sm mb-0">
+                        {% if produits.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ produits.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for i in produits.paginator.page_range %}
+                        <li class="page-item {% if produits.number == i %}active{% endif %}">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                        {% endfor %}
+                        
+                        {% if produits.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ produits.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+<!-- inventory/fournisseurs/modifier.html -->
+{% extends 'inventory/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Modifier le Fournisseur</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Enregistrer</button>
+        <a href="{% url 'liste_fournisseurs' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock %}

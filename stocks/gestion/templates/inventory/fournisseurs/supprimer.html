@@ -1,0 +1,18 @@
+{% extends 'inventory/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Supprimer le Fournisseur</h2>
+    <p>Êtes-vous sûr de vouloir supprimer le fournisseur suivant ?</p>
+    <ul>
+        <li><strong>Nom :</strong> {{ fournisseur.nom }}</li>
+        <li><strong>Adresse :</strong> {{ fournisseur.adresse }}</li>
+        <li><strong>Téléphone :</strong> {{ fournisseur.telephone }}</li>
+        <li><strong>Email :</strong> {{ fournisseur.email }}</li>
+    </ul>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+        <a href="{% url 'liste_fournisseurs' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock %}

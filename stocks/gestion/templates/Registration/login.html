@@ -1,0 +1,277 @@
+<!-- templates/registration/login.html -->
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2 class="login-title">Connexion</h2>
+            <div class="login-decoration">
+                <div class="decoration-circle"></div>
+                <div class="decoration-line"></div>
+                <div class="decoration-circle"></div>
+            </div>
+        </div>
+        
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}" class="form-label">
+                    <i class="fas fa-user icon"></i>
+                    Nom d'utilisateur
+                </label>
+                {{ form.username }}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}" class="form-label">
+                    <i class="fas fa-lock icon"></i>
+                    Mot de passe
+                </label>
+                {{ form.password }}
+                <div class="password-toggle">
+                    <i class="fas fa-eye"></i>
+                </div>
+            </div>
+            
+            <button type="submit" class="login-btn">
+                <span>Se connecter</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            
+            <div class="login-footer">
+                <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+                <a href="#" class="create-account">Créer un compte</a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="login-art">
+        <div class="art-shape shape-1"></div>
+        <div class="art-shape shape-2"></div>
+        <div class="art-shape shape-3"></div>
+        <div class="art-shape shape-4"></div>
+    </div>
+</div>
+
+<style>
+    /* Style de base */
+    :root {
+        --primary-color: #4a6bff;
+        --secondary-color: #ff7d4a;
+        --dark-color: #2a3044;
+        --light-color: #f8f9fa;
+        --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: var(--dark-color);
+    }
+    
+    .login-container {
+        display: flex;
+        width: 900px;
+        height: 600px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .login-card {
+        width: 50%;
+        padding: 50px;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        z-index: 2;
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .login-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .login-decoration {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .decoration-circle {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--gradient);
+    }
+    
+    .decoration-line {
+        width: 50px;
+        height: 2px;
+        background: var(--gradient);
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+        position: relative;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--dark-color);
+    }
+    
+    .icon {
+        margin-right: 10px;
+        color: var(--primary-color);
+    }
+    
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 15px 15px 15px 45px;
+        border: 2px solid #e0e3ff;
+        border-radius: 10px;
+        font-size: 14px;
+        transition: all 0.3s;
+        background-color: #f8f9ff;
+    }
+    
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
+        outline: none;
+    }
+    
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 40px;
+        cursor: pointer;
+        color: #a7afc7;
+    }
+    
+    .login-btn {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        background: var(--gradient);
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s;
+        margin-top: 10px;
+    }
+    
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(74, 107, 255, 0.4);
+    }
+    
+    .login-footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        font-size: 13px;
+    }
+    
+    .forgot-password,
+    .create-account {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    
+    .forgot-password:hover,
+    .create-account:hover {
+        color: var(--secondary-color);
+        text-decoration: underline;
+    }
+    
+    .login-art {
+        width: 50%;
+        background: var(--gradient);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .art-shape {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .shape-1 {
+        width: 200px;
+        height: 200px;
+        top: -50px;
+        right: -50px;
+    }
+    
+    .shape-2 {
+        width: 300px;
+        height: 300px;
+        bottom: -100px;
+        left: -100px;
+    }
+    
+    .shape-3 {
+        width: 150px;
+        height: 150px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .shape-4 {
+        width: 100px;
+        height: 100px;
+        top: 70%;
+        right: 20%;
+    }
+</style>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script>
+    // Toggle password visibility
+    document.querySelector('.password-toggle').addEventListener('click', function() {
+        const passwordInput = document.querySelector('input[type="password"]');
+        const icon = this.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    });
+</script>
